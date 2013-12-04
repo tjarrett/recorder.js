@@ -1,0 +1,94 @@
+/*global module:false*/
+module.exports = function (grunt) {
+
+	var EMPTY = "empty:";
+
+	function includeHelper(patterns, regexp, replace) {
+		regexp = new RegExp(regexp);
+			return grunt.util._.map(grunt.file.expand(patterns), function (file) {
+				return "<%= pkg.name %>/" + file.replace(regexp, replace);
+		});
+	}
+
+	// load all grunt tasks matching the `grunt-*` pattern
+	require('load-grunt-tasks')(grunt);
+	grunt.loadNpmTasks("grunt-git-dist");
+
+	grunt.registerTask("build", ["exec:make","copy:dist","uglify"]);
+	grunt.registerTask("default", ["clean:dist","build"]);
+	grunt.registerTask("release", [
+		"clean:dist",
+		"git-dist:release:clone",
+		"build",
+		"git-describe",
+		"git-dist:release:add",
+		"git-dist:release:commit",
+		"git-dist:release:push"
+	]);
+
+	grunt.event.on("git-describe", function(git_version) {
+		grunt.config("pkg.version", grunt.config("pkg.version") + "+" + git_version.object);
+	});
+
+	// Project configuration.
+	grunt.config.init({
+		pkg: grunt.file.readJSON('package.json'),
+		meta: {
+			version: "<%= pkg.version %>",
+			banner: "/*! <%= pkg.name %> - <%= pkg.version %> @ <%= grunt.template.today('yyyy-mm-dd HH:MM:ss') %> */"
+		},
+		clean: {
+			"dist": "dist/"
+		},
+		exec: {
+			make: {
+				cmd: "make",
+				stdout: false,
+				stderr: false
+			}
+		},
+		copy: {
+			dist: {
+				files: [
+					{
+						expand : true,
+						src: ["recorder.js","recorder.swf"],
+						dest: "dist"
+					}
+				]
+			}
+		},
+		uglify: {
+			dist: {
+				src: [ "<banner>", "dist/recorder.js" ],
+				dest: "dist/recorder.min.js"
+			}
+		},
+		"git-describe": {
+			bundle: {}
+		},
+		bump: {
+			options: {
+				commitMessage: 'Release v%VERSION%',
+				createTag: true,
+				tagName: 'v%VERSION%',
+				tagMessage: 'Version %VERSION%',
+				push: true,
+				pushTo: 'origin',
+				// options to use with '$ git describe'
+				gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d'
+			}
+		},
+		"git-dist" : {
+			"release" : {
+				"options" : {
+					"branch" : "dist",
+					"dir" : "dist",
+					"message" : "Built <%= pkg.name %> - <%= pkg.version %>"
+				}
+			}
+		}
+	});
+
+
+};
