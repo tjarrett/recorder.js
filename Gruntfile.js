@@ -14,8 +14,8 @@ module.exports = function (grunt) {
 	require('load-grunt-tasks')(grunt);
 	grunt.loadNpmTasks("grunt-git-dist");
 
-	grunt.registerTask("build", ["exec:make","copy:dist","uglify"]);
-	grunt.registerTask("default", ["clean:dist","build"]);
+	grunt.registerTask("build", ["exec:make","copy:dist","urequire","uglify"]);
+	grunt.registerTask("default", ["clean:dist","build", "clean:swf"]);
 	grunt.registerTask("release", [
 		"clean:dist",
 		"git-dist:release:clone",
@@ -38,7 +38,8 @@ module.exports = function (grunt) {
 			banner: "/*! <%= pkg.name %> - <%= pkg.version %> @ <%= grunt.template.today('yyyy-mm-dd HH:MM:ss') %> */"
 		},
 		clean: {
-			"dist": "dist/"
+			"dist": "dist/",
+			"swf": "*.swf"
 		},
 		exec: {
 			make: {
@@ -52,10 +53,18 @@ module.exports = function (grunt) {
 				files: [
 					{
 						expand : true,
-						src: ["recorder.js","recorder.swf"],
+						src: ["recorder.js","recorder.swf","require.js", "module.js"],
 						dest: "dist"
 					}
 				]
+			}
+		},
+		urequire: {
+			amd: {
+				template: "AMD",
+				path: 'dist',
+				filez: ["recorder.js"],
+				forceOverwriteSources: true
 			}
 		},
 		uglify: {

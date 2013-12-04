@@ -12,7 +12,8 @@
     "grunt-git-dist": "~0.4.0",
     "grunt-util-options": "0.0.2",
     "grunt-exec": "~0.4.2",
-    "grunt-git-describe": "~2.3.2"
+    "grunt-git-describe": "~2.3.2",
+    "grunt-urequire": "~0.6.0"
   },
   "engines": {
     "node": ">=0.6.0"
