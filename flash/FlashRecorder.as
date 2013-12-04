@@ -7,7 +7,7 @@ package {
       var logger:Logger;
       logger = new Logger();
       ExternalInterface.addCallback("debugLog", logger.debugLog);
-      var recorder = new Recorder(logger);
+      var recorder = new Recorder(logger, true, loaderInfo.bytes);
       recorder.addExternalInterfaceCallbacks();
     }
   }
