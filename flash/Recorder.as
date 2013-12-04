@@ -468,8 +468,8 @@ package
 		{
 			var expectedSampleRate = 44.1;
 			var writtenSamples = 0;
-			var channels = 2;
-			var maxSamples = 8192 * channels;
+			var channels : int = 2;
+			var maxSamples : int = 8192 * channels;
 			// if the sampleRate doesn't match the expectedSampleRate of flash.media.Sound (44.1) write the sample multiple times
 			// this will result in a little down pitchshift.
 			// also write 2 times for stereo channels
@@ -489,7 +489,7 @@ package
 		
 		/* ExternalInterface Communication */
 		
-		protected function triggerEvent(eventName:String, arg0, arg1 = null):void
+		protected function triggerEvent(eventName:String, arg0:*, arg1:* = null):void
 		{	
 			ExternalInterface.call("Recorder.triggerEvent", eventName, arg0, arg1);
 		}
