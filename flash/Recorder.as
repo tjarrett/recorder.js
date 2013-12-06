@@ -45,7 +45,6 @@ package
 			{
 				if(ApplicationDomain.currentDomain.hasDefinition("flash.system.Worker"))
 				{
-					ExternalInterface.call("console.log", "use worker...");
 					Worker = getDefinitionByName("flash.system.Worker");
 					WorkerDomain = getDefinitionByName("flash.system.WorkerDomain");
 					MessageChannel = getDefinitionByName("flash.system.MessageChannel");
@@ -92,7 +91,7 @@ package
 			ExternalInterface.addCallback("saveAudioFile",	this.saveAudioFile);
 
 			triggerEvent("initialized", {});
-			logger.log("Recorder initialized");
+            logger.log("Recorder initialized");
 		}
 
 		
@@ -180,7 +179,6 @@ package
 			if(!lastEncoding && audioFormat == AUDIO_FORMAT_MP3)
 			{
 				wavData.position = 0;
-				ExternalInterface.call("console.log", "start encoding...", lastRecordDuration);
 				mp3Encoder.start(wavData, lastRecordDuration);
 				encoding = true;
 			}
@@ -192,8 +190,6 @@ package
 			if(mp3Encoder)
 			{
 				lastEncoding = mp3Encoder.mp3Data;
-				ExternalInterface.call("console.log", "encoding completed", lastEncoding);
-
 				mp3Encoder.wavData = null;
 				mp3Encoder.mp3Data = null;
 			}
@@ -205,8 +201,6 @@ package
 					this.upload.apply(null, lastUploadCall);
 					lastUploadCall = null;
 				}
-				
-//				triggerEvent('showFlash','');
 			}
 			else
 			{
@@ -490,7 +484,7 @@ package
 		/* ExternalInterface Communication */
 		
 		protected function triggerEvent(eventName:String, arg0:*, arg1:* = null):void
-		{	
+		{
 			ExternalInterface.call("Recorder.triggerEvent", eventName, arg0, arg1);
 		}
 	}
