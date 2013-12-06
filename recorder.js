@@ -7,6 +7,7 @@ var __isAMD = !!(typeof define === 'function' && define.amd),
 define(
 
 function (require, exports, module) {
+  var __umodule__ = (function (require, exports, module) {
   
 
 var Recorder = {
@@ -897,7 +898,18 @@ if (swfobject == undefined) {
     }();
 }
 
+module.exports = Recorder;
+
 return module.exports;
 
+}).call(this, require, exports, module);
+var __old__Recorder = window.Recorder;
+window.Recorder = __umodule__;
+
+__umodule__.noConflict = function () {
+  window.Recorder = __old__Recorder;
+return __umodule__;
+};
+return __umodule__;
 });
 }).call(this, (typeof exports === 'object' ? global : window), (typeof exports === 'object' ? global : window));
