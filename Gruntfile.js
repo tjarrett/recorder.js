@@ -64,7 +64,24 @@ module.exports = function (grunt) {
 				template: "AMD",
 				path: 'dist',
 				filez: ["recorder.js"],
-				forceOverwriteSources: true
+                // Export global Recorder for bridging flash.
+                dependencies: {
+                    exports: {
+                        root: {
+                            "recorder": "Recorder"
+                        }
+                    }
+                },
+                resources: [
+                    [
+                        '+exportsVars',
+                        ["recorder.js"],
+                        function (m) {
+                            m.afterBody = "module.exports = Recorder;"
+                        }
+                    ]
+                ],
+                forceOverwriteSources: true
 			}
 		},
 		uglify: {
