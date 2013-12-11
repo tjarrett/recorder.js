@@ -2,6 +2,7 @@ package
 {
 	import com.adobe.audio.format.WAVWriter;
 	import flash.events.Event;
+	import flash.events.HTTPStatusEvent;
 	import flash.events.SampleDataEvent;
 	import flash.events.StatusEvent;
 	import flash.events.TimerEvent;
@@ -309,13 +310,22 @@ package
 			logger.log("upload");
 			buffer.position = 0;
 			var ml:MultipartURLLoader = new MultipartURLLoader();
+			ml.addEventListener(HTTPStatusEvent.HTTP_STATUS, handleError);
 			ml.addEventListener(Event.COMPLETE, onReady);
 			function onReady(e:Event):void
 			{
 				triggerEvent('uploadSuccess', externalInterfaceEncode(e.target.loader.data));
 				logger.log('uploading done');
 			}
-			
+
+			function handleError(e:HTTPStatusEvent):void
+			{
+				if(e.status !== 200){
+					triggerEvent('uploadFailure', e.status);
+					logger.log('uploading failed');
+				}
+			}
+
 			if(getQualifiedClassName(parameters.constructor) == "Array"){
 				for(var i=0; i<parameters.length; i++){
 					ml.addVariable(parameters[i][0], parameters[i][1]);
