@@ -72,6 +72,9 @@ var Recorder = {
       this.bind("uploadSuccess", function (responseText) {
         options.success(Recorder._externalInterfaceDecode(responseText));
       });
+      this.bind("uploadFailure", function (httpStatus) {
+        options.error(httpStatus);
+      });
       this.flashInterface().upload(options.url, options.audioParam, options.params, options.audioFormat);
     },
     encode: function (audioFormat) {
