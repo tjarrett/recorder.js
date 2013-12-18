@@ -175,6 +175,8 @@ var Recorder = {
       var flashContainer = Recorder.options.flashContainer;
       flashContainer.style.left = (window.innerWidth || document.body.offsetWidth) / 2 - 115 + "px";
       flashContainer.style.top = (window.innerHeight || document.body.offsetHeight) / 2 - 70 + "px";
+      flashContainer.style.width = "auto";
+      flashContainer.style.height = "auto";
     },
     _defaultOnHideFlash: function () {
       var flashContainer = Recorder.options.flashContainer;
@@ -190,7 +192,7 @@ var Recorder = {
           Recorder._flashBlockCatched = true;
           Recorder.triggerEvent("showFlash");
         }
-      }, 500);
+      }, 2000);
     },
     _showFlashRequiredDialog: function () {
       Recorder.options.flashContainer.innerHTML = "<p>Adobe Flash Player 10.1 or newer is required to use this feature.</p><p><a href='http://get.adobe.com/flashplayer' target='_top'>Get it on Adobe.com.</a></p>";
