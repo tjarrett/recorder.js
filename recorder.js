@@ -188,6 +188,8 @@ var Recorder = {
     var flashContainer = Recorder.options.flashContainer;
     flashContainer.style.left   = ((window.innerWidth  || document.body.offsetWidth)  / 2) - 115 + "px";
     flashContainer.style.top    = ((window.innerHeight || document.body.offsetHeight) / 2) - 70  + "px";
+    flashContainer.style.width = "auto";
+    flashContainer.style.height = "auto";
   },
 
   _defaultOnHideFlash: function(){
@@ -205,7 +207,7 @@ var Recorder = {
         Recorder._flashBlockCatched = true;
         Recorder.triggerEvent("showFlash");
       }
-    }, 500);
+    }, 2000);
   },
 
   _showFlashRequiredDialog: function(){
