@@ -1,3 +1,7 @@
+/**
+ * This code is a fork of Recorder.js as prepared by garryyao with tweaks by 
+ * Tim Jarrett to make mp3 recording the default. See https://github.com/garryyao/recorder.js
+ */
 var Recorder = {
   version: 1.13,
   swfObject: null,
@@ -6,6 +10,13 @@ var Recorder = {
   _initialized: false,
   _flashBlockCatched: false,
   options: {},
+  /**
+   * 
+   * Options:
+   *  flashContainer  - The div to use as the flash container (optional)
+   *  initialized     - The function to call after initilization
+   *  onFlashSecurity - The function to call when flash security needs to be accessed
+   */
   initialize: function(options){
     this.options = options || {};
 
@@ -34,7 +45,12 @@ var Recorder = {
   clear: function(){
     Recorder._events = {};
   },
-
+  /**
+   * Options
+   *   start -- call back for once recording has started
+   *   progress -- callback for recording progress (argument in milliseconds)
+   *   cancel   -- Callback for recording cancelled
+   */
   record: function(options){
     options = options || {};
     this.clearBindings("recordingStart");
@@ -57,6 +73,19 @@ var Recorder = {
     return this.flashInterface()._stop();
   },
   
+  pause: function() {
+    this.flashInterface().recordPause();
+  },
+  
+  resume: function() {
+    this.flashInterface().recordResume();
+  },
+  
+  isPaused: function() {
+      console.log("in isPaused");
+    return this.flashInterface().isRecordingPaused();
+  },
+  
   play: function(options){
     options = options || {};
     this.clearBindings("playingProgress");
@@ -66,10 +95,18 @@ var Recorder = {
     this.flashInterface()._play();
   },
 
+  /**
+   * Options
+   *  audioParam -
+   *  params 
+   *  audioFormat
+   *  success
+   *  error
+   */
   upload: function(options){
     options.audioParam = options.audioParam || "audio";
     options.params     = options.params || {};
-    options.audioFormat= options.audioFormat || Recorder.AUDIO_FORMAT_WAV;
+    options.audioFormat= options.audioFormat || Recorder.AUDIO_FORMAT_MP3;
     this.clearBindings("uploadSuccess");
     this.bind("uploadSuccess", function(responseText){
       options.success(Recorder._externalInterfaceDecode(responseText));
@@ -77,12 +114,11 @@ var Recorder = {
     this.bind("uploadFailure", function(httpStatus){
       options.error(httpStatus);
     });
-
     this.flashInterface().upload(options.url, options.audioParam, options.params, options.audioFormat);
   },
   
   encode: function(audioFormat) {
-	var audioFormat = audioFormat || Recorder.AUDIO_FORMAT_WAV;
+	var audioFormat = audioFormat || Recorder.AUDIO_FORMAT_MP3;
 	
 	this.flashInterface().encode(audioFormat);
   },
