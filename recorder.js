@@ -1,9 +1,9 @@
 /**
  * This code is a fork of Recorder.js as prepared by garryyao with tweaks by 
- * Tim Jarrett to make mp3 recording the default. See https://github.com/garryyao/recorder.js
+ * Tim Jarrett to allow pausing. See https://github.com/tjarrett/recorder.js
  */
 var Recorder = {
-  version: 1.13,
+  version: 1.14,
   swfObject: null,
   _callbacks: {},
   _events: {},
@@ -82,7 +82,6 @@ var Recorder = {
   },
   
   isPaused: function() {
-      console.log("in isPaused");
     return this.flashInterface().isRecordingPaused();
   },
   
